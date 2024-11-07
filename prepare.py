@@ -11,7 +11,7 @@ from tqdm import tqdm
 import itertools
 from sklearn.decomposition import PCA
 #Connection to the DB
-conn = sqlite3.connect('/event.db')
+conn = sqlite3.connect('event.db')
 
 cursor = conn. cursor()
 cursor. execute("SELECT name FROM sqlite_master WHERE type='table';") # [('event_number',), ('event',), ('drug',), ('extraction',)]
@@ -30,7 +30,7 @@ def save_f(name,mat):
   print(name)
   print(mat.shape)
   df = pd.DataFrame(mat)
-  df.to_csv('/DDI/'+str(name)+'.csv', header=None, index=False)
+  df.to_csv('DDI/'+str(name)+'.csv', header=None, index=False)
 
 def Jaccard(matrix):
   matrix = np.mat(matrix)
@@ -60,7 +60,7 @@ def feature_vector(df, feature_name):
 
   return sim_matrix
 
-conn = sqlite3.connect('/event.db')
+conn = sqlite3.connect('event.db')
 df_drug = pd.read_sql('select * from drug;', conn)
 
 feature_list = ['target', 'enzyme', 'pathway', 'smile']
@@ -78,7 +78,7 @@ for feature in feature_list:
 
 conn.close()
 
-conn = sqlite3.connect('/event.db')
+conn = sqlite3.connect('event.db')
 extraction = pd.read_sql('select * from extraction;', conn)
 mechanism = extraction['mechanism']
 action = extraction['action']
@@ -112,7 +112,7 @@ full_pos = np.array(np.vstack((mat_DDI[:,0],postive1,postive2))).astype('int32')
 full_pos = full_pos.T
 
 df = pd.DataFrame(np.array(full_pos).tolist())
-df.to_csv('/DDI/full_pos2.txt', header=None, index=None, sep=' ')
+df.to_csv('DDI/full_pos2.txt', header=None, index=None, sep=' ')
 
 conn.close()
 
@@ -156,7 +156,7 @@ def make_neg_pairs(matrix):
   np.random.shuffle(all_neg)
   print("all_neg.shape : ", all_neg.shape, "all_pos.shape : ", all_pos.shape)
   df = pd.DataFrame(np.array(all_neg).tolist())
-  df.to_csv('/DDI/all_neg2.txt', header=None, index=None, sep=' ')
+  df.to_csv('DDI/all_neg2.txt', header=None, index=None, sep=' ')
   return all_neg
 
 all_neg = make_neg_pairs(full_pos[:,1:])
@@ -165,12 +165,12 @@ for itm in tqdm(range(9)):
   if itm == 0: 
     full_pos = np.array(np.array(pd.read_csv("DDI/full_pos2.txt", header=None , sep=' ')).tolist())
   elif itm == 1:
-    all_neg = np.array(np.array(pd.read_csv("/DDI/all_neg2.txt", header=None , sep=' ')).tolist())
+    all_neg = np.array(np.array(pd.read_csv("DDI/all_neg2.txt", header=None , sep=' ')).tolist())
   elif itm == 2:
-    target = np.array(np.array(pd.read_csv("/DDI/target_PCA.csv", header=None)).tolist())
-    enzyme = np.array(np.array(pd.read_csv("/DDI/enzyme_PCA.csv", header=None)).tolist())
-    pathway = np.array(np.array(pd.read_csv("/DDI/pathway_PCA.csv", header=None)).tolist())
-    smile = np.array(np.array(pd.read_csv("/DDI/smile_PCA.csv", header=None)).tolist())
+    target = np.array(np.array(pd.read_csv("DDI/target_PCA.csv", header=None)).tolist())
+    enzyme = np.array(np.array(pd.read_csv("DDI/enzyme_PCA.csv", header=None)).tolist())
+    pathway = np.array(np.array(pd.read_csv("DDI/pathway_PCA.csv", header=None)).tolist())
+    smile = np.array(np.array(pd.read_csv("DDI/smile_PCA.csv", header=None)).tolist())
   elif itm == 3:
     full_pos = np.array(np.vstack((full_pos[:,0],full_pos[:,1],full_pos[:,2],[1]*len(full_pos)))).astype('int32').T
     all_cat_pos = []
@@ -316,11 +316,11 @@ print(train_final1.shape,train_final1[-1])
 train_final = train_final1
 
 df = pd.DataFrame(np.array(train_final))
-df.to_csv('/DDI/data5/train.txt', header=None, index=None, sep=' ')
+df.to_csv('DDI/data5/train.txt', header=None, index=None, sep=' ')
 df = pd.DataFrame(np.array(valid_cat))
-df.to_csv('/DDI/data5/valid.txt', header=None, index=None, sep=' ')
+df.to_csv('DDI/data5/valid.txt', header=None, index=None, sep=' ')
 df = pd.DataFrame(np.array(test_cat))
-df.to_csv('/DDI/data5/test.txt', header=None, index=None, sep=' ')
+df.to_csv('DDI/data5/test.txt', header=None, index=None, sep=' ')
 
 def write_f(a_f,path_f):
   print(a_f.shape)
@@ -331,8 +331,8 @@ def write_f(a_f,path_f):
     csv.writer(txt_file, delimiter=' ').writerows(a_f)
 
 print(len(f_all_m1[:]),len(f_all_m1[0]), f_all_m1.shape)
-f1 = write_f(f_all_m1,'/DDI/data5/featuers_m1.txt')
-f2 = write_f(f_all_m2,'/DDI/data5/featuers_m2.txt')
-f3 = write_f(f_all_m3,'/DDI/data5/featuers_m3.txt')
-f4 = write_f(f_all_m4,'/DDI/data5/featuers_m4.txt')
+f1 = write_f(f_all_m1,'DDI/data5/featuers_m1.txt')
+f2 = write_f(f_all_m2,'DDI/data5/featuers_m2.txt')
+f3 = write_f(f_all_m3,'DDI/data5/featuers_m3.txt')
+f4 = write_f(f_all_m4,'DDI/data5/featuers_m4.txt')
 

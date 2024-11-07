@@ -16,6 +16,13 @@ For additional details, read the published article for this work through this [l
 
 ## Usage
 ---
+Run the following to create an env: 
+```
+    conda env create -f environment.yml
+    conda activate ddi_env_v2
+    pip install sklearn
+```
+
 The data used in this project is derived from the study of [Deng et al.](https://doi.org/10.1093/bioinformatics/btaa501). You can access the data from [GitHub link](https://github.com/YifanDengWHU/DDIMDL).
 When using this code, you need to clone this repo and load all the files in the folder into your running environment first. Then, you should enter the root directory and run the following code:
 ```
